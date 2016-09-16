@@ -97,6 +97,20 @@ class RAMLDataType(object):
 
 
 @attr.s
+class Example(object):
+    """
+    Single example.
+    """
+    value       = attr.ib()
+    name        = attr.ib(default=None)
+    description = attr.ib(default=None, repr=False)
+    displayName = attr.ib(default=None)
+
+    # Not sure when validation of examples should get done; leave for now.
+    strict      = attr.ib(default=True)
+
+
+@attr.s
 class DataTypeAttrs(object):
     """
     Mixin to add properties to BaseDataType that is not a part of the RAML
