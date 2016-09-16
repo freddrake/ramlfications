@@ -1,0 +1,40 @@
+#%RAML 0.8
+
+title: Example
+baseUri: https://example.test/
+
+mediaType: application/json
+protocols: [ HTTPS ]
+
+types:
+
+  with_example_and_examples:
+    type: string
+    example: This is the example.
+    examples:
+      simple: "abc"
+      fancy: "two words"
+      excessive:
+        displayName: "Serious Overkill"
+        description: |
+          There's way too much text here.
+        value: "This is a long example."
+        strict: false
+
+  bar:
+    type: object
+    example:
+      value: "This is a value."
+
+  bar:
+    type: object
+    example: "This is a value."
+
+  bat:
+    type: object
+    example:
+      displayName: "yada yada"
+      value: "This is a value."
+
+/sample:
+  displayName: Silly, silly example.
