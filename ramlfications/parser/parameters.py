@@ -19,7 +19,7 @@ from ramlfications.utils.parser import get_data_type_obj_by_name
 
 class BaseParameterParser(object):
     def create_base_param_obj(self, attribute_data, param_obj,
-                              config, errors, **kw):
+                              config, errors, root, **kw):
         """
         Helper function to create a child of a
         :py:class:`.parameters.BaseParameter` object
@@ -31,9 +31,12 @@ class BaseParameterParser(object):
                 required = _get(value, "required", default=True)
             else:
                 required = _get(value, "required", default=False)
-            root = kw.get('root')
             data_type_name = _get(value, "type")
             data_type = get_data_type_obj_by_name(data_type_name, root)
+            if root.raml_version == "0.8":
+                examples = None
+            else:
+                examples = _get(value, "examples")
             kwargs = dict(
                 name=key,
                 raw={key: value},
@@ -47,6 +50,7 @@ class BaseParameterParser(object):
                 default=_get(value, "default"),
                 enum=_get(value, "enum"),
                 example=_get(value, "example"),
+                examples=examples,
                 required=required,
                 repeat=_get(value, "repeat", False),
                 pattern=_get(value, "pattern"),
@@ -219,7 +223,8 @@ class ResponseParser(BaseParameterParser, BodyParserMixin):
         header_objects = self.create_base_param_obj(headers, Header,
                                                     self.root.config,
                                                     self.root.errors,
-                                                    method=self.method)
+                                                    method=self.method,
+                                                    root=self.root)
         return header_objects or None
 
     def parse_response_body(self):
