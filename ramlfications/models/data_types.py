@@ -100,6 +100,9 @@ class RAMLDataType(object):
 class Example(object):
     """
     Single example.
+
+    Used starting with RAML 1.0.
+
     """
     value       = attr.ib()
     name        = attr.ib(default=None)

@@ -31,24 +31,24 @@ def parse_type(name, raw, root):
 
     if root.raml_version == "0.8" and "examples" in data:
         del data["examples"]
+        # Should emit a lint warning if there's an examples node and we're
+        # processing RAML 0.8: authors may be expecting it to be honored.
 
-    if 'example' in raw:
-        if root.raml_version == "0.8":
-            example = Example(value=raw["example"])
-        else:
+    if root.raml_version >= "1.0":
+        if 'example' in raw:
             example = parse_example(root, None, raw['example'])
-        data['example'] = example
+            data['example'] = example
 
-    if 'examples' in raw and root.raml_version >= "1.0":
-        if "example" in data:
-            raise RuntimeError("example and examples cannot co-exist")
-        examples = raw['examples']
-        # Must be a map:
-        if not isinstance(examples, dict):
-            # Need to decide what exception to make this.
-            raise UnknownDataTypeError
-        data['examples'] = [parse_example(root, nm, val)
-                            for nm, val in iteritems(examples)]
+        if 'examples' in raw:
+            if "example" in data:
+                raise RuntimeError("example and examples cannot co-exist")
+            examples = raw['examples']
+            # Must be a map:
+            if not isinstance(examples, dict):
+                # Need to decide what exception to make this.
+                raise UnknownDataTypeError
+            data['examples'] = [parse_example(root, nm, val)
+                                for nm, val in iteritems(examples)]
 
     return data_type_cls(**data)
 
