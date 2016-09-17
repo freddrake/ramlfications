@@ -104,13 +104,13 @@ class Example(object):
     Used starting with RAML 1.0.
 
     """
-    value       = attr.ib()
-    name        = attr.ib(default=None)
-    description = attr.ib(default=None, repr=False)
-    displayName = attr.ib(default=None)
+    value        = attr.ib()
+    name         = attr.ib(default=None)
+    description  = attr.ib(default=None, repr=False)
+    display_name = attr.ib(default=None)
 
     # Not sure when validation of examples should get done; leave for now.
-    strict      = attr.ib(default=True)
+    strict       = attr.ib(default=True)
 
 
 @attr.s

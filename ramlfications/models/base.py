@@ -109,8 +109,11 @@ class BaseNamedParameter(object):
         in RAML file, defaults to ``name``.
     :param list enum: Array of valid parameter values, or ``None``.  \
         Only applies when primative ``type`` is ``string``.
-    :param example: Example value for property, or ``None``.  Type of \
-        ``example`` will match that of ``type``.
+    :param example: Example value for property, or ``None``. \
+        For RAML 0.8, the type of ``example`` will match that of ``type``. \
+        For RAML 1.0, ``example`` will be an ``Example`` object with a \
+        ``value`` attribute whose type matches that of ``type``.
+    :param examples: List of ``Example`` objects (RAML 1.0 only).
     :param int max_length: Parameter value's maximum number of \
         characters, or ``None``. Only applies when primative ``type`` \
         is ``string``.
@@ -133,6 +136,7 @@ class BaseNamedParameter(object):
     desc         = attr.ib(repr=False)
     display_name = attr.ib(repr=False)
     example      = attr.ib(repr=False)
+    examples     = attr.ib(repr=False)
     max_length   = attr.ib(repr=False, validator=string_type_parameter)
     maximum      = attr.ib(repr=False, validator=integer_number_type_parameter)
     min_length   = attr.ib(repr=False, validator=string_type_parameter)

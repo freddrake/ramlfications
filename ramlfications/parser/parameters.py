@@ -30,6 +30,10 @@ class BaseParameterParser(object):
                 required = _get(value, "required", default=True)
             else:
                 required = _get(value, "required", default=False)
+            if kw['root'].raml_version == "0.8":
+                examples = None
+            else:
+                examples = _get(value, "examples")
             kwargs = dict(
                 name=key,
                 raw={key: value},
@@ -42,6 +46,7 @@ class BaseParameterParser(object):
                 default=_get(value, "default"),
                 enum=_get(value, "enum"),
                 example=_get(value, "example"),
+                examples=examples,
                 required=required,
                 repeat=_get(value, "repeat", False),
                 pattern=_get(value, "pattern"),
@@ -190,7 +195,8 @@ class ParameterParser(BaseParameterParser, BodyParserMixin):
 
         object_name = map_object(self.param)
         params = self.create_base_param_obj(resolved, object_name, conf,
-                                            errs, method=self.method)
+                                            errs, method=self.method,
+                                            root=self.root)
         return params or None
 
 
