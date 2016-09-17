@@ -12,13 +12,13 @@ from ramlfications.parser import parse_raml
 from ramlfications.config import setup_config
 from ramlfications.utils import load_file
 
-from tests.base import V020EXAMPLES
+from tests.base import RAML_10
 
 
 @pytest.fixture(scope="session")
 def api():
-    ramlfile = os.path.join(V020EXAMPLES, "data_types_1_0.raml")
+    ramlfile = os.path.join(RAML_10, "data-type-examples.raml")
     loaded_raml = load_file(ramlfile)
-    conffile = os.path.join(V020EXAMPLES, "test_config.ini")
+    conffile = os.path.join(RAML_10, "test_config.ini")
     config = setup_config(conffile)
     return parse_raml(loaded_raml, config)
