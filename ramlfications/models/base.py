@@ -136,7 +136,6 @@ class BaseNamedParameter(object):
     desc         = attr.ib(repr=False)
     display_name = attr.ib(repr=False)
     example      = attr.ib(repr=False)
-    examples     = attr.ib(repr=False)
     max_length   = attr.ib(repr=False, validator=string_type_parameter)
     maximum      = attr.ib(repr=False, validator=integer_number_type_parameter)
     min_length   = attr.ib(repr=False, validator=string_type_parameter)
@@ -145,7 +144,6 @@ class BaseNamedParameter(object):
                            validator=string_type_parameter)
     pattern      = attr.ib(repr=False, default=None,
                            validator=string_type_parameter)
-    repeat       = attr.ib(repr=False, default=False)
 
 
 @attr.s
@@ -184,3 +182,15 @@ class BaseParameter(BaseNamedParameter, BaseParameterAttrs):
         ``ramlfications`` library.
     :param list errors: List of RAML validation errors.
     """
+
+
+@attr.s
+class BaseParameterRaml08(object):
+    """TODO: writeme"""
+    repeat = attr.ib(repr=False)
+
+
+@attr.s
+class BaseParameterRaml10(object):
+    """TODO: writeme"""
+    examples = attr.ib(repr=False)

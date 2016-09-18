@@ -19,7 +19,7 @@ from tests.base import RAML_10
 def api():
     ramlfile = os.path.join(RAML_10, "data-type-examples.raml")
     loaded_raml = load_file(ramlfile)
-    conffile = os.path.join(RAML_10, "test_config.ini")
+    conffile = os.path.join(RAML_10, "test-config.ini")
     config = setup_config(conffile)
     return parse_raml(loaded_raml, config)
 

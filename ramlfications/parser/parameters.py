@@ -3,9 +3,13 @@
 
 from __future__ import absolute_import, division, print_function
 
+import attr
 from six import iteritems, itervalues, string_types
 
 from ramlfications.config import MEDIA_TYPES
+from ramlfications.models.base import (
+    BaseParameterRaml08, BaseParameterRaml10
+)
 from ramlfications.models.parameters import (
     Body, Header, Response, URIParameter
 )
@@ -33,10 +37,6 @@ class BaseParameterParser(object):
                 required = _get(value, "required", default=False)
             data_type_name = _get(value, "type")
             data_type = get_data_type_obj_by_name(data_type_name, root)
-            if root.raml_version == "0.8":
-                examples = None
-            else:
-                examples = _get(value, "examples")
             kwargs = dict(
                 name=key,
                 raw={key: value},
@@ -50,9 +50,7 @@ class BaseParameterParser(object):
                 default=_get(value, "default"),
                 enum=_get(value, "enum"),
                 example=_get(value, "example"),
-                examples=examples,
                 required=required,
-                repeat=_get(value, "repeat", False),
                 pattern=_get(value, "pattern"),
                 type=_get(value, "type", "string"),
                 config=config,
@@ -60,8 +58,24 @@ class BaseParameterParser(object):
             )
             if param_obj is Header:
                 kwargs["method"] = _get(kw, "method")
+            if root:
+                if root.raml_version == "1.0":
+                    kwargs["examples"] = _get(value, "examples")
+                else:
+                    kwargs["repeat"] = _get(value, "repeat", False)
 
-            item = param_obj(**kwargs)
+            ParamObj = param_obj  # NOQA
+            # build object class based off of raml version
+            if root:
+                mixin = BaseParameterRaml10
+                if root.raml_version == "0.8":
+                    mixin = BaseParameterRaml08
+
+                @attr.s
+                class ParamObj(param_obj, mixin):
+                    pass
+
+            item = ParamObj(**kwargs)
             objects.append(item)
 
         return objects or None
